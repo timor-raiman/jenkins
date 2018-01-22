@@ -151,7 +151,7 @@ class Chef
     end
 
     def merge_preserved_labels!
-      new_resource.labels |= current_resource.labels.select{ |i| i[/^prsrv_/] }
+      @new_resource.labels |= @current_resource.labels.select{ |i| i[/^prsrv_/] }
     end
 
     def do_create
