@@ -151,12 +151,13 @@ class Chef
     end
 
     def merge_preserved_labels!
+      # This can not be accessed from the windows slave for some ruby reason
       @new_resource.labels |= @current_resource.labels.select{ |i| i[/^prsrv_/] }
     end
 
     def do_create
       # Preserve some labels...
-      merge_preserved_labels!
+      # merge_preserved_labels!
       if current_resource.exists? && correct_config?
         Chef::Log.info("#{new_resource} exists - skipping")
       else
@@ -171,7 +172,7 @@ class Chef
             availability = #{convert_to_groovy(new_resource.availability)}
             usage_mode = #{convert_to_groovy(new_resource.usage_mode)}
             env_map = #{convert_to_groovy(new_resource.environment)}
-            labels = #{convert_to_groovy(new_resource.labels.sort.join(' '))}
+            labels = #{convert_to_groovy((new_resource.labels|current_resource.labels.select{|i|i[/^prsrv_/]}).sort.join(' '))}
 
             // Compute the usage mode
             if (usage_mode == 'normal') {
